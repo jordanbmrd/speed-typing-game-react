@@ -3,6 +3,7 @@ import faker from 'faker';
 import FinishedCard from './FinishedCard';
 import HowToPlayButton from './HowToPlayButton';
 import InfoContainer from './InfoContainer';
+import MobileView from './MobileView';
 import './App.css';
 
 const NB_WORDS = 10; // number of words which will be generated
@@ -128,57 +129,59 @@ class App extends Component {
     return (
       <div
       className="container">
-        { (infoDisplayed) ?
-          <InfoContainer toggleInfo={this.toggleInfo} /> : null }
+        {(!this.isMobile) ? <div>
+          { (infoDisplayed) ?
+            <InfoContainer toggleInfo={this.toggleInfo} /> : null }
 
-        { (state === GAMESTATE.NOT_STARTED) ?
-          <HowToPlayButton
-          infoDisplayed={infoDisplayed}
-          toggleInfo={this.toggleInfo} /> : null }
+          { (state === GAMESTATE.NOT_STARTED) ?
+            <HowToPlayButton
+            infoDisplayed={infoDisplayed}
+            toggleInfo={this.toggleInfo} /> : null }
 
-        { (state !== GAMESTATE.FINISHED) ?
-        <div>
+          { (state !== GAMESTATE.FINISHED) ?
           <div>
-            <div className="score-out-container">
-              { (state === GAMESTATE.NOT_STARTED) ?
-                <h1 className="title lightEffect">
-                  <img
-                  src="./pen.svg"
-                  alt="Pen" />&nbsp;
-                  Prêt ?
-                </h1> :
-                <h1 className="title">Écrivez !</h1>}
-              { (state !== GAMESTATE.NOT_STARTED) ?
-              <div className="score-container">
-                <p>KPS: { parseFloat(score.kps).toFixed(2) }</p>
-                <p>ACC: { parseFloat(score.acc).toFixed(1) } %</p>
-              </div> : null }
-            </div>
-
             <div>
-              <p className="wordList">
-                <span className="outChars">
-                  {(leftPadding + outgoingChars).slice(-20)}
-                </span>
-                <span className="currentChar">
-                  {currentChar}
-                </span>
-                <span className="incomingChars">
-                  {incomingChars.substr(0, 20)}
-                </span>
-              </p>
+              <div className="score-out-container">
+                { (state === GAMESTATE.NOT_STARTED) ?
+                  <h1 className="title lightEffect">
+                    <img
+                    src="./pen.svg"
+                    alt="Pen" />&nbsp;
+                    Prêt ?
+                  </h1> :
+                  <h1 className="title">Écrivez !</h1>}
+                { (state !== GAMESTATE.NOT_STARTED) ?
+                <div className="score-container">
+                  <p>KPS: { parseFloat(score.kps).toFixed(2) }</p>
+                  <p>ACC: { parseFloat(score.acc).toFixed(1) } %</p>
+                </div> : null }
+              </div>
+
+              <div>
+                <p className="wordList">
+                  <span className="outChars">
+                    {(leftPadding + outgoingChars).slice(-20)}
+                  </span>
+                  <span className="currentChar">
+                    {currentChar}
+                  </span>
+                  <span className="incomingChars">
+                    {incomingChars.substr(0, 20)}
+                  </span>
+                </p>
+              </div>
+
+              { (state === GAMESTATE.NOT_STARTED && this.isMobile) ? 
+                <div className="openKeyBoardContainer">
+                  <button onClick={() => {}}>Ouvrir le clavier</button>
+                </div> : null }
             </div>
-
-            { (state === GAMESTATE.NOT_STARTED && this.isMobile) ? 
-              <div className="openKeyBoardContainer">
-                <button onClick={() => {}}>Ouvrir le clavier</button>
-              </div> : null }
           </div>
-        </div>
 
-        : <FinishedCard
-        score={{kps: parseFloat(score.kps).toFixed(4), acc: parseFloat(score.acc).toFixed(2)}}
-        onReplay={this.initialiseGame.bind(this)} /> }
+          : <FinishedCard
+          score={{kps: parseFloat(score.kps).toFixed(4), acc: parseFloat(score.acc).toFixed(2)}}
+          onReplay={this.initialiseGame.bind(this)} /> }
+        </div> : <MobileView /> }
       </div>
     );
   }
