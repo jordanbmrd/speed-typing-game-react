@@ -1,0 +1,22 @@
+.info {
+  position: absolute;
+  background-color: #bfbfbf;
+  border: 1px solid gray;
+  padding: 15px;
+  border-radius: 8px;
+}
+.infoImg {
+  text-align: center;
+}
+.info img {
+  width: 300px;
+}
+.info p, .info b, .info em {
+  color: black !important;
+}
+.info b {
+  font-size: 17px;
+}
+.info em:hover {
+  cursor: pointer;
+}

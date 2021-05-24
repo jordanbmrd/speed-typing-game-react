@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import faker from 'faker';
 import FinishedCard from './FinishedCard';
+import HowToPlayButton from './HowToPlayButton';
+import InfoContainer from './InfoContainer';
 import './App.css';
 
-const NB_WORDS = 10;
-const SAFE_LENGTH_SCORE = 5;
+const NB_WORDS = 10; // number of words which will be generated
+const SAFE_LENGTH_SCORE = 5; // how many numbers will be save after the coma for score
 const GAMESTATE = {
   NOT_STARTED: 0,
   PLAYING: 1,
@@ -79,7 +81,6 @@ class App extends Component {
       navigator.userAgent.indexOf( "iPhone" ) !== -1 || 
       navigator.userAgent.indexOf( "Android" ) !== -1 || 
       navigator.userAgent.indexOf( "Windows Phone" ) !== -1;
-    console.log(this.isMobile);
   }
   componentWillUnmount = () => clearInterval(this.state.intervalID);
 
@@ -119,47 +120,24 @@ class App extends Component {
       });
     };
 
+  toggleInfo = () => this.setState({infoDisplayed: !this.state.infoDisplayed});
+
   render() {
     const { leftPadding, outgoingChars, currentChar, incomingChars, state, score, infoDisplayed } = this.state;
 
     return (
       <div
       className="container">
-        { (state === GAMESTATE.NOT_STARTED) ?
-          <button
-          className="infoBtn"
-          onClick={() => this.setState({infoDisplayed: !infoDisplayed})}>
-            { (!infoDisplayed) ?
-              <img 
-              src="./infoBtn.svg"
-              alt="i" /> :
-              <img
-              src="./x-square.svg"
-              alt="x" /> }
-          </button> : null }
-
         { (infoDisplayed) ?
-          <div
-          className="info"
-          onClick={() => this.setState({infoDisplayed: false})}>
-            <div className="infoImg">
-              <img
-              src="./info.svg"
-              alt="info" />
-            </div>
-            <p><b>Comment jouer ?</b><br/><br/>
-            Avec ton clavier, tape les mots le plus vite possible.<br/>
-            L'objectif est de réaliser le meilleur temps possible (kps) avec la meilleure précision.<br/>
-            Entraîne-toi et deviens le meilleur mon khey</p>
-            <br/>
-            <em>Clique ici pour jouer</em>
-        </div> : null }
+          <InfoContainer toggleInfo={this.toggleInfo} /> : null }
+
+        { (state === GAMESTATE.NOT_STARTED) ?
+          <HowToPlayButton
+          infoDisplayed={infoDisplayed}
+          toggleInfo={this.toggleInfo} /> : null }
 
         { (state !== GAMESTATE.FINISHED) ?
         <div>
-
-        {/* (state === GAMESTATE.NOT_STARTED) ? <p className="title">À vos claviers...</p> :
-          <p className="title">Écrivez !</p> */}
           <div>
             <div className="score-out-container">
               { (state === GAMESTATE.NOT_STARTED) ?
@@ -177,7 +155,6 @@ class App extends Component {
               </div> : null }
             </div>
 
-          { (state !== GAMESTATE.FINISHED) ?
             <div>
               <p className="wordList">
                 <span className="outChars">
@@ -190,17 +167,18 @@ class App extends Component {
                   {incomingChars.substr(0, 20)}
                 </span>
               </p>
-            </div> : null }
+            </div>
 
             { (state === GAMESTATE.NOT_STARTED && this.isMobile) ? 
               <div className="openKeyBoardContainer">
-                <button>Ouvrir le clavier</button>
+                <button onClick={() => {}}>Ouvrir le clavier</button>
               </div> : null }
-
           </div>
         </div>
 
-        : <FinishedCard score={{kps: parseFloat(score.kps).toFixed(4), acc: parseFloat(score.acc).toFixed(2)}} onReplay={this.initialiseGame.bind(this)} /> }
+        : <FinishedCard
+        score={{kps: parseFloat(score.kps).toFixed(4), acc: parseFloat(score.acc).toFixed(2)}}
+        onReplay={this.initialiseGame.bind(this)} /> }
       </div>
     );
   }
