@@ -129,9 +129,8 @@ class App extends Component {
     return (
       <div
       className="container">
-        <InfoContainer toggleInfo={this.toggleInfo} /> : null }
+        { (infoDisplayed) ?<InfoContainer toggleInfo={this.toggleInfo} /> : null }
         {(!this.isMobile) ? <div>
-          { (infoDisplayed) ?
 
           { (state === GAMESTATE.NOT_STARTED) ?
             <HowToPlayButton
