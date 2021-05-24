@@ -16,7 +16,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      infoDisplayed: true,
+      infoDisplayed: false,
       words: '',
       leftPadding: Array(80).fill(' ').join(''),
       outgoingChars: '',
