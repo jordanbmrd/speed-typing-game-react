@@ -6,5 +6,5 @@
 
 ## Images
 
-[Playing](./images/typing.png)
-[Ended](./images/end.png)
+![Playing](./images/typing.png)
+![Ended](./images/end.png)
